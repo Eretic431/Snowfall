@@ -28,8 +28,7 @@ public class SnowflakesView extends View {
 
         super(context, attrs);
 
-        paint = new Paint();
-        paint.setAntiAlias(true);
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         random = new Random();
         snowflakes = new ArrayList<>(300);
     }
