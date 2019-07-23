@@ -7,8 +7,13 @@ import java.util.Random;
 
 public class Snowflake {
 
+    private int coef;
+    private int radius;
+    private Point position;
+    private int velocity;
+
     public Snowflake() {
-        Random random = new Random();
+        final Random random = new Random();
         coef = random.nextInt(4) + 1;
         if (random.nextBoolean()) {
             coef *= -1;
@@ -18,10 +23,7 @@ public class Snowflake {
     }
 
     public int getColor() {
-        if (velocity == 1) {
-            return Color.rgb(169, 169, 169);
-        }
-        return Color.rgb(255, 255, 255);
+        return velocity == 1 ? Color.rgb(169, 169, 169) : Color.rgb(255, 255, 255);
     }
 
     public int getCoef() {
@@ -40,12 +42,18 @@ public class Snowflake {
         position = newPosition;
     }
 
+    public void setPosition(int x, int y) {
+        final Point newPosition = new Point(x, y);
+        setPosition(newPosition);
+    }
+
     public int getVelocity() {
         return velocity;
     }
 
-    private int coef;
-    private int radius;
-    private Point position;
-    private int velocity;
+    public void setDefaultPosition(int w, int dw) {
+        final Random random = new Random();
+        final int x = random.nextInt(w + 2 * dw - 1) - dw;
+        setPosition(x, 0);
+    }
 }

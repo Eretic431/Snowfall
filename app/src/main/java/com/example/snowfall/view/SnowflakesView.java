@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.snowfall.model.Snowflake;
@@ -16,29 +17,38 @@ import java.util.Random;
 
 public class SnowflakesView extends View {
 
+    private int dw;
+    private Paint paint;
+    private int width;
+    private int height;
+    private Random random;
+    private ArrayList<Snowflake> snowflakes;
+
     public SnowflakesView(Context context, @Nullable AttributeSet attrs) {
+
         super(context, attrs);
+
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        random = new Random();
+        snowflakes = new ArrayList<>(300);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        paint = new Paint();
-        random = new Random();
-        snowflakes = new ArrayList<>();
-        paint.setAntiAlias(true);
         width = w;
         height = h;
         dw = width / 4;
         for (int i = 0; i < 300; i++) {
-            snowflakes.add(new Snowflake());
-            snowflakes.get(i).setPosition(new Point(random.nextInt(width + 2 * dw - 1), 0));
+            final Snowflake snowflake = new Snowflake();
+            snowflake.setDefaultPosition(width, dw);
+            snowflakes.add(snowflake);
         }
-
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(final @NonNull Canvas canvas) {
         super.onDraw(canvas);
         move();
         drawSnow(canvas);
@@ -46,13 +56,11 @@ public class SnowflakesView extends View {
     }
 
     private void move() {
-        for (int i = 0; i < snowflakes.size(); i++) {
+        for (Snowflake snowflake : snowflakes) {
             final Point newPoint = new Point();
-            final int dw = width / 4;
-            snowflake = snowflakes.get(i);
             final Point oldPoint = snowflake.getPosition();
-            if ((oldPoint.x > (width + dw)) || (oldPoint.x < -dw) || (oldPoint.y > height) || (oldPoint.y < 0)) {
-                snowflake.setPosition(new Point(random.nextInt(width + 2 * dw - 1) - dw, 0));
+            if ((oldPoint.x > width + dw) || (oldPoint.x < -dw) || (oldPoint.y > height) || (oldPoint.y < 0)) {
+                snowflake.setDefaultPosition(width, dw);
                 continue;
             }
             if (snowflake.getCoef() < 0) {
@@ -66,19 +74,10 @@ public class SnowflakesView extends View {
     }
 
     public void drawSnow(Canvas canvas) {
-        for (int i = 0; i < snowflakes.size(); i++) {
-            snowflake = snowflakes.get(i);
+        for (Snowflake snowflake : snowflakes) {
             final Point pos = snowflake.getPosition();
             paint.setColor(snowflake.getColor());
             canvas.drawCircle(pos.x, pos.y, snowflake.getRadius(), paint);
         }
     }
-
-    public int dw;
-    public Snowflake snowflake;
-    public Paint paint;
-    public int width;
-    public int height;
-    public Random random;
-    public ArrayList<Snowflake> snowflakes;
 }
