@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import com.example.snowfall.model.Snowflake;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class SnowflakesView extends View {
 
@@ -21,7 +20,6 @@ public class SnowflakesView extends View {
     private Paint paint;
     private int width;
     private int height;
-    private Random random;
     private ArrayList<Snowflake> snowflakes;
 
     public SnowflakesView(Context context, @Nullable AttributeSet attrs) {
@@ -29,7 +27,6 @@ public class SnowflakesView extends View {
         super(context, attrs);
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        random = new Random();
         snowflakes = new ArrayList<>(300);
     }
 
@@ -62,18 +59,18 @@ public class SnowflakesView extends View {
                 snowflake.setDefaultPosition(width, dw);
                 continue;
             }
-            if (snowflake.getCoef() < 0) {
+            if (snowflake.getCoefficient() < 0) {
                 newPoint.x = snowflake.getPosition().x - snowflake.getVelocity();
             } else {
                 newPoint.x = snowflake.getPosition().x + snowflake.getVelocity();
             }
-            newPoint.y = snowflake.getPosition().y + Math.abs(snowflake.getCoef()) * snowflake.getVelocity();
+            newPoint.y = snowflake.getPosition().y + Math.abs(snowflake.getCoefficient()) * snowflake.getVelocity();
             snowflake.setPosition(newPoint);
         }
     }
 
-    public void drawSnow(Canvas canvas) {
-        for (Snowflake snowflake : snowflakes) {
+    public void drawSnow(final @NonNull Canvas canvas) {
+        for (final Snowflake snowflake : snowflakes) {
             final Point pos = snowflake.getPosition();
             paint.setColor(snowflake.getColor());
             canvas.drawCircle(pos.x, pos.y, snowflake.getRadius(), paint);

@@ -7,27 +7,29 @@ import java.util.Random;
 
 public class Snowflake {
 
-    private int coef;
+    private int coefficient;
     private int radius;
     private Point position;
     private int velocity;
+    private static final int GRAY  = 169;
+    private static final int WHITE = 255;
 
     public Snowflake() {
         final Random random = new Random();
-        coef = random.nextInt(4) + 1;
+        coefficient = random.nextInt(4) + 1;
         if (random.nextBoolean()) {
-            coef *= -1;
+            coefficient *= -1;
         }
         radius = random.nextInt(12) + 5;
         velocity = random.nextInt(2) + 1;
     }
 
     public int getColor() {
-        return velocity == 1 ? Color.rgb(169, 169, 169) : Color.rgb(255, 255, 255);
+        return velocity == 1 ? Color.rgb(GRAY, GRAY, GRAY) : Color.rgb(WHITE, WHITE,WHITE);
     }
 
-    public int getCoef() {
-        return coef;
+    public int getCoefficient() {
+        return coefficient;
     }
 
     public int getRadius() {
